@@ -1,0 +1,313 @@
+---
+config:
+  layout: elk
+---
+flowchart TB
+ subgraph FROTA["🚗 FROTA"]
+    direction LR
+        CATEGORIA["CATEGORIA"]
+        A_cat1(["<u>id_cat</u>"])
+        A_cat2(["nome"])
+        A_cat3(["valor_diaria"])
+        R1{"classifica"}
+        VEICULO["VEICULO"]
+        A_vei1(["<u>placa</u>"])
+        A_vei2(["renavam"])
+        A_vei3(["marca"])
+        A_vei4(["modelo"])
+        A_vei5(["cor"])
+        A_vei6(["ano_fabricacao"])
+        A_vei7(["tipo_combustivel"])
+        A_vei8(["km_atual"])
+        A_vei9(["nivel_combustivel"])
+        A_vei10(["status"])
+  end
+ subgraph CLI["👤 CLIENTES"]
+    direction LR
+        CLIENTE["CLIENTE"]
+        A_cli1(["<u>cpf</u>"])
+        A_cli2(["nome"])
+        A_cli3(["data_nascimento"])
+        A_cli4(["email"])
+        A_cli5(["inadimplente"])
+        A_cli6(["cnh_numero"])
+        A_cli7(["cnh_categoria"])
+        A_cli8(["cnh_validade"])
+        A_end(["endereco"])
+        A_end1(["rua"])
+        A_end2(["numero"])
+        A_end3(["bairro"])
+        A_end4(["cidade"])
+        A_end5(["estado"])
+        A_end6(["cep"])
+        R2{"possui"}
+        TELEFONE["TELEFONE_CLIENTE"]
+        A_tel1(["<u>numero</u>"])
+        A_tel2(["tipo"])
+  end
+ subgraph EQ["👔 EQUIPE"]
+    direction TB
+        FUNCIONARIO["FUNCIONARIO"]
+        A_fun1(["<u>id_func</u>"])
+        A_fun2(["nome"])
+        A_fun3(["cpf"])
+        ISA{{"d (disjunta, total)"}}
+        ATENDENTE["ATENDENTE"]
+        GERENTE["GERENTE"]
+  end
+ subgraph PROT["🛡️ PROTEÇÃO"]
+    direction LR
+        SEGURO["SEGURO"]
+        A_seg1(["<u>id_seguro</u>"])
+        A_seg2(["nome"])
+        A_seg3(["descricao_cobertura"])
+        A_seg4(["valor_diario"])
+  end
+ subgraph LOC["📋 LOCAÇÃO"]
+    direction LR
+        LOCACAO["LOCACAO"]
+        A_loc1(["<u>id_loc</u>"])
+        A_loc2(["status"])
+        A_loc3(["data_reserva"])
+        A_loc4(["data_retirada"])
+        A_loc5(["data_devol_prevista"])
+        A_loc6(["data_devol_real"])
+        A_loc7(["/valor_total/"])
+  end
+ subgraph VIST["🔍 VISTORIAS"]
+    direction LR
+        VISTORIA["VISTORIA"]
+        A_vis1(["<u>id_vistoria</u>"])
+        A_vis2(["tipo"])
+        A_vis3(["data_hora"])
+        A_vis4(["km"])
+        A_vis5(["nivel_combustivel"])
+        A_vis6(["observacoes"])
+  end
+ subgraph FIN["💰 FINANCEIRO"]
+    direction LR
+        PAGAMENTO["PAGAMENTO"]
+        A_pag1(["<u>id_pagamento</u>"])
+        A_pag2(["forma_pagamento"])
+        A_pag3(["valor"])
+        A_pag4(["data"])
+        COBRANCA_EXTRA["COBRANCA_EXTRA"]
+        A_cob1(["<u>id_cobranca</u>"])
+        A_cob2(["tipo"])
+        A_cob3(["descricao"])
+        A_cob4(["valor"])
+  end
+ subgraph MAN["🔧 MANUTENÇÃO"]
+    direction LR
+        MANUTENCAO["MANUTENCAO"]
+        A_man1(["<u>id_manut</u>"])
+        A_man2(["tipo"])
+        A_man3(["motivo"])
+        A_man4(["descricao"])
+        A_man5(["data_entrada"])
+        A_man6(["previsao_saida"])
+        A_man7(["data_saida_real"])
+        A_man8(["custo"])
+  end
+    A_cat1 --- CATEGORIA
+    A_cat2 --- CATEGORIA
+    A_cat3 --- CATEGORIA
+    CATEGORIA -- (0,N) --- R1
+    R1 == (1,1) === VEICULO
+    A_vei1 --- VEICULO
+    A_vei2 --- VEICULO
+    A_vei3 --- VEICULO
+    A_vei4 --- VEICULO
+    A_vei5 --- VEICULO
+    A_vei6 --- VEICULO
+    A_vei7 --- VEICULO
+    A_vei8 --- VEICULO
+    A_vei9 --- VEICULO
+    A_vei10 --- VEICULO
+    A_cli1 --- CLIENTE
+    A_cli2 --- CLIENTE
+    A_cli3 --- CLIENTE
+    A_cli4 --- CLIENTE
+    A_cli5 --- CLIENTE
+    A_cli6 --- CLIENTE
+    A_cli7 --- CLIENTE
+    A_cli8 --- CLIENTE
+    A_end --- CLIENTE
+    A_end1 --- A_end
+    A_end2 --- A_end
+    A_end3 --- A_end
+    A_end4 --- A_end
+    A_end5 --- A_end
+    A_end6 --- A_end
+    CLIENTE -- (0,N) --- R2 & R3{"realiza"}
+    R2 == (1,1) === TELEFONE
+    A_tel1 --- TELEFONE
+    A_tel2 --- TELEFONE
+    A_fun1 --- FUNCIONARIO
+    A_fun2 --- FUNCIONARIO
+    A_fun3 --- FUNCIONARIO
+    FUNCIONARIO --- ISA
+    ISA --- ATENDENTE & GERENTE
+    A_seg1 --- SEGURO
+    A_seg2 --- SEGURO
+    A_seg3 --- SEGURO
+    A_seg4 --- SEGURO
+    R3 == (1,1) === LOCACAO
+    VEICULO -- (0,N) --- R4{"vincula"} & R10{"sofre"}
+    R4 == (1,1) === LOCACAO
+    FUNCIONARIO -- (0,N) --- R5{"registra"} & R6{"autoriza"} & R9{"realiza_vistoria"} & R11{"registra_manut"}
+    R5 == (1,1) === LOCACAO
+    R6 -- (0,1) --- LOCACAO
+    SEGURO -- (0,N) --- R7{"cobre"}
+    R7 == (1,1) === LOCACAO
+    A_loc1 --- LOCACAO
+    A_loc2 --- LOCACAO
+    A_loc3 --- LOCACAO
+    A_loc4 --- LOCACAO
+    A_loc5 --- LOCACAO
+    A_loc6 --- LOCACAO
+    A_loc7 --- LOCACAO
+    LOCACAO -- (0,N) --- R8{"gera_vistoria"} & R12{"gera_pagamento"} & R13{"gera_cobranca"}
+    R8 == (1,1) === VISTORIA
+    R12 == (1,1) === PAGAMENTO
+    R13 == (1,1) === COBRANCA_EXTRA
+    A_vis1 --- VISTORIA
+    A_vis2 --- VISTORIA
+    A_vis3 --- VISTORIA
+    A_vis4 --- VISTORIA
+    A_vis5 --- VISTORIA
+    A_vis6 --- VISTORIA
+    R9 == (1,1) === VISTORIA
+    VISTORIA -- (0,N) --- R14b{"origina"}
+    R14b -- (0,1) --- COBRANCA_EXTRA
+    A_pag1 --- PAGAMENTO
+    A_pag2 --- PAGAMENTO
+    A_pag3 --- PAGAMENTO
+    A_pag4 --- PAGAMENTO
+    A_cob1 --- COBRANCA_EXTRA
+    A_cob2 --- COBRANCA_EXTRA
+    A_cob3 --- COBRANCA_EXTRA
+    A_cob4 --- COBRANCA_EXTRA
+    A_man1 --- MANUTENCAO
+    A_man2 --- MANUTENCAO
+    A_man3 --- MANUTENCAO
+    A_man4 --- MANUTENCAO
+    A_man5 --- MANUTENCAO
+    A_man6 --- MANUTENCAO
+    A_man7 --- MANUTENCAO
+    A_man8 --- MANUTENCAO
+    R10 == (1,1) === MANUTENCAO
+    R11 == (1,1) === MANUTENCAO
+    VISTORIA ~~~ PAGAMENTO
+    COBRANCA_EXTRA ~~~ MANUTENCAO
+
+     CATEGORIA:::ent
+     A_cat1:::pk
+     A_cat2:::atr
+     A_cat3:::atr
+     R1:::rel
+     VEICULO:::ent
+     A_vei1:::pk
+     A_vei2:::atr
+     A_vei3:::atr
+     A_vei4:::atr
+     A_vei5:::atr
+     A_vei6:::atr
+     A_vei7:::atr
+     A_vei8:::atr
+     A_vei9:::atr
+     A_vei10:::atr
+     CLIENTE:::ent
+     A_cli1:::pk
+     A_cli2:::atr
+     A_cli3:::atr
+     A_cli4:::atr
+     A_cli5:::atr
+     A_cli6:::atr
+     A_cli7:::atr
+     A_cli8:::atr
+     A_end:::composto
+     A_end1:::composto
+     A_end2:::composto
+     A_end3:::composto
+     A_end4:::composto
+     A_end5:::composto
+     A_end6:::composto
+     R2:::rel
+     TELEFONE:::entFraca
+     A_tel1:::pk
+     A_tel2:::atr
+     FUNCIONARIO:::ent
+     A_fun1:::pk
+     A_fun2:::atr
+     A_fun3:::atr
+     ISA:::isa
+     ATENDENTE:::ent
+     GERENTE:::ent
+     SEGURO:::ent
+     A_seg1:::pk
+     A_seg2:::atr
+     A_seg3:::atr
+     A_seg4:::atr
+     LOCACAO:::ent
+     A_loc1:::pk
+     A_loc2:::atr
+     A_loc3:::atr
+     A_loc4:::atr
+     A_loc5:::atr
+     A_loc6:::atr
+     A_loc7:::derivado
+     VISTORIA:::ent
+     A_vis1:::pk
+     A_vis2:::atr
+     A_vis3:::atr
+     A_vis4:::atr
+     A_vis5:::atr
+     A_vis6:::atr
+     PAGAMENTO:::ent
+     A_pag1:::pk
+     A_pag2:::atr
+     A_pag3:::atr
+     A_pag4:::atr
+     COBRANCA_EXTRA:::ent
+     A_cob1:::pk
+     A_cob2:::atr
+     A_cob3:::atr
+     A_cob4:::atr
+     MANUTENCAO:::ent
+     A_man1:::pk
+     A_man2:::atr
+     A_man3:::atr
+     A_man4:::atr
+     A_man5:::atr
+     A_man6:::atr
+     A_man7:::atr
+     A_man8:::atr
+     R3:::rel
+     R4:::rel
+     R10:::rel
+     R5:::rel
+     R6:::rel
+     R9:::rel
+     R11:::rel
+     R7:::rel
+     R8:::rel
+     R12:::rel
+     R13:::rel
+     R14b:::rel
+    classDef ent fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#0d1117
+    classDef entFraca fill:#e1f5fe,stroke:#01579b,stroke-width:4px,color:#0d1117
+    classDef rel fill:#fff,stroke:#555,stroke-width:1.5px,color:#0d1117
+    classDef atr fill:#f5f5f5,stroke:#888,stroke-dasharray: 5 5,color:#1a1a1a
+    classDef pk fill:#e3f2fd,stroke:#1565c0,stroke-width:1.5px,color:#0d1117
+    classDef derivado fill:#fff9c4,stroke:#f9a825,stroke-dasharray: 3 3,color:#1a1a1a
+    classDef composto fill:#e8f5e9,stroke:#2e7d32,stroke-dasharray: 5 5,color:#1a1a1a
+    classDef isa fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#0d1117
+    style FROTA fill:#ffffff,stroke:#495057,stroke-width:2px,color:#212529
+    style CLI fill:#ffffff,stroke:#0d1117,stroke-width:2px,color:#000000
+    style EQ fill:#ffffff,stroke:#495057,stroke-width:2px,color:#212529
+    style PROT fill:#ffffff,stroke:#495057,stroke-width:2px,color:#212529
+    style LOC fill:#fff3e0,stroke:#e65100,stroke-width:2.5px,color:#212529
+    style VIST fill:#ffffff,stroke:#495057,stroke-width:2px,color:#212529
+    style FIN fill:#ffffff,stroke:#495057,stroke-width:2px,color:#212529
+    style MAN fill:#ffffff,stroke:#495057,stroke-width:2px,color:#212529

@@ -1,0 +1,7 @@
+.agent/
+_bmad/
+_bmad-output/
+design-artifacts/
+docs/
+*.mmd.bak
+.DS_Store
