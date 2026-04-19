@@ -31,7 +31,7 @@ O **RentFlow** visa criar uma modelagem sólida que consiga gerenciar o ciclo co
 ## 📄 Documentação
 
 - [📄 Minimundo do Sistema (PDF)](./RentFlow/minimundo/MINIMUNDO_%20SISTEMA%20RENTFLOW.pdf)
-- [🧩 Modelo Lógico (DBML / Relacional)](./RentFlow/modelo_logico/modelo_logico_rentflow.md)
+- [🧩 Modelo Lógico (Texto / Mermaid)](./RentFlow/modelo_logico/modelo_logico_rentflow.md)
 
 ---
 *Projeto desenvolvido como estudo prático para a disciplina de Banco de Dados da UFRPE.*

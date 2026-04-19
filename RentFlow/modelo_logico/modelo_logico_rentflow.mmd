@@ -1,0 +1,126 @@
+erDiagram
+    CATEGORIA {
+        INT id_cat PK
+        VARCHAR nome
+        NUMERIC valor_diaria
+    }
+    VEICULO {
+        VARCHAR placa PK
+        VARCHAR renavam
+        VARCHAR marca
+        VARCHAR modelo
+        VARCHAR cor
+        INT ano_fabricacao
+        VARCHAR tipo_combustivel
+        INT km_atual
+        INT nivel_combustivel
+        VARCHAR status
+        INT id_cat FK
+    }
+    CLIENTE {
+        VARCHAR cpf PK
+        VARCHAR nome
+        DATE data_nascimento
+        VARCHAR email
+        BOOLEAN inadimplente
+        VARCHAR cnh_numero
+        VARCHAR cnh_categoria
+        DATE cnh_validade
+        VARCHAR rua
+        VARCHAR numero
+        VARCHAR bairro
+        VARCHAR cidade
+        VARCHAR estado
+        VARCHAR cep
+    }
+    TELEFONE_CLIENTE {
+        VARCHAR cpf_cliente PK,FK
+        VARCHAR numero PK
+        VARCHAR tipo
+    }
+    FUNCIONARIO {
+        INT id_func PK
+        VARCHAR cpf
+        VARCHAR nome
+    }
+    ATENDENTE {
+        INT id_func PK,FK
+    }
+    GERENTE {
+        INT id_func PK,FK
+    }
+    SEGURO {
+        INT id_seguro PK
+        VARCHAR nome
+        TEXT descricao_cobertura
+        NUMERIC valor_diario
+    }
+    LOCACAO {
+        INT id_loc PK
+        VARCHAR status
+        DATETIME data_reserva
+        DATETIME data_retirada
+        DATETIME data_devol_prevista
+        DATETIME data_devol_real
+        NUMERIC valor_total
+        VARCHAR cpf_cliente FK
+        VARCHAR placa_veiculo FK
+        INT id_seguro FK
+        INT id_atendente_registro FK
+        INT id_gerente_autoriza FK
+    }
+    VISTORIA {
+        INT id_vistoria PK
+        VARCHAR tipo
+        DATETIME data_hora
+        INT km
+        INT nivel_combustivel
+        TEXT observacoes
+        INT id_loc FK
+        INT id_func_vistoriador FK
+    }
+    PAGAMENTO {
+        INT id_pagamento PK
+        VARCHAR forma_pagamento
+        NUMERIC valor
+        DATETIME data_pagamento
+        INT id_loc FK
+    }
+    COBRANCA_EXTRA {
+        INT id_cobranca PK
+        VARCHAR tipo
+        TEXT descricao
+        NUMERIC valor
+        INT id_loc FK
+        INT id_vistoria_origem FK
+    }
+    MANUTENCAO {
+        INT id_manut PK
+        VARCHAR tipo
+        VARCHAR motivo
+        TEXT descricao
+        DATETIME data_entrada
+        DATETIME previsao_saida
+        DATETIME data_saida_real
+        NUMERIC custo
+        VARCHAR placa_veiculo FK
+        INT id_func_registro FK
+    }
+
+    %% Relações do Modelo Lógico (1:N e afins baseados em chaves)
+    CATEGORIA ||--|{ VEICULO : possui
+    CLIENTE ||--o{ TELEFONE_CLIENTE : tem
+    FUNCIONARIO ||--|{ ATENDENTE : "é"
+    FUNCIONARIO ||--|{ GERENTE : "é"
+    CLIENTE ||--o{ LOCACAO : realiza
+    VEICULO ||--o{ LOCACAO : vinculada
+    SEGURO ||--o{ LOCACAO : cobre
+    ATENDENTE ||--o{ LOCACAO : registra
+    GERENTE ||--o{ LOCACAO : autoriza
+    LOCACAO ||--o{ VISTORIA : gera
+    FUNCIONARIO ||--o{ VISTORIA : realiza
+    LOCACAO ||--o{ PAGAMENTO : possui
+    LOCACAO ||--o{ COBRANCA_EXTRA : possui
+    VISTORIA ||--o| COBRANCA_EXTRA : origina
+    VEICULO ||--o{ MANUTENCAO : sofre
+    FUNCIONARIO ||--o{ MANUTENCAO : registra
