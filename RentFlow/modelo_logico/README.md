@@ -4,7 +4,13 @@ Este diretório reúne o modelo lógico do RentFlow. O PDF e o arquivo Mermaid (
 
 ## Objetivo
 
-Transformar o modelo conceitual do sistema em um esquema relacional coerente, destacando as decisões de normalização, os relacionamentos entre entidades e as restrições que garantem consistência dos dados.
+Transformar o modelo conceitual do sistema em um esquema relacional coerente, destacando as decisões de normalização, as premissas herdadas do minimundo, os relacionamentos entre entidades e as restrições que garantem consistência dos dados.
+
+## Premissas, Restrições e Interpretações
+
+- As premissas do minimundo foram mantidas na passagem para o relacional.
+- As restrições de negócio foram convertidas em chaves, vínculos e campos controlados.
+- As interpretações do modelo conceitual foram refinadas para garantir consistência entre o diagrama e o esquema relacional.
 
 ## Principais decisões de modelagem
 

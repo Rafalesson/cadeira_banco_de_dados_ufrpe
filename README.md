@@ -2,6 +2,13 @@
 
 Repositório acadêmico do **RentFlow**, um projeto de modelagem de banco de dados para uma locadora de veículos. O material está organizado para mostrar a evolução do projeto a partir do levantamento de requisitos até a modelagem relacional atual.
 
+## Equipe
+
+- Rafael Alesson Couto da Silva
+- Antônio Carlos Sabino de Araújo Lira Filho
+- Vitor Fernandes Dallegrave
+- Flávia Borges
+
 ## Estrutura do Repositório
 
 As pastas presentes no projeto representam as etapas já documentadas:

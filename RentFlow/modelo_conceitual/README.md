@@ -4,7 +4,13 @@ Este diretório reúne a documentação do modelo conceitual do RentFlow. O diag
 
 ## Objetivo
 
-Representar as entidades principais do domínio da locadora, seus atributos, relacionamentos e regras estruturais, servindo de base para a construção do modelo lógico.
+Representar as entidades principais do domínio da locadora, seus atributos, relacionamentos, premissas e restrições estruturais, servindo de base para a construção do modelo lógico.
+
+## Premissas, Restrições e Interpretações
+
+- As premissas do minimundo foram preservadas na modelagem conceitual, como unidade única de operação e atendimento a pessoas físicas.
+- As restrições de negócio foram traduzidas para entidades, atributos e relacionamentos do diagrama.
+- As interpretações necessárias para representar o domínio foram incorporadas no desenho do modelo, especialmente nos casos de telefone, endereço, locação, vistoria, pagamento e manutenção.
 
 ## Principais decisões de modelagem
 
