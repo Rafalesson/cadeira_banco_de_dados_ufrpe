@@ -1,119 +1,133 @@
 # Modelo Lógico Relacional - RentFlow
 
-Este documento define a conversão do Modelo Conceitual do sistema RentFlow para o Modelo Lógico relacional. O esquema relacional abaixo demonstra as entidades (Tabelas), colunas, e as regras de restrição de Chaves Primárias (PK) e Chaves Estrangeiras (FK).
+Este diretório reúne o modelo lógico do RentFlow. O PDF e o arquivo Mermaid (`.mmd`) descrevem a mesma modelagem relacional, com tabelas, atributos, chaves e restrições revisadas para representar melhor as regras do sistema.
 
-Destaques da Modelagem:
-1. **Atributo Composto (Endereço):** Achatado/Flat na tabela `CLIENTE`.
-2. **Atributo Multivalorado (Telefone):** Extraído para uma tabela `TELEFONE_CLIENTE` relacionada com a primária.
-3. **Herança (Funcionário/Atendente/Gerente):** Utilizada a estratégia de preservação com junção (tabela da superclasse preserva os dados comuns, as tabelas filhas herdam sua PK como PK/FK).
+## Objetivo
 
----
+Transformar o modelo conceitual do sistema em um esquema relacional coerente, destacando as decisões de normalização, os relacionamentos entre entidades e as restrições que garantem consistência dos dados.
 
-## 1. Esquema Relacional de Tabelas
+## Principais decisões de modelagem
 
-**CATEGORIA**
-- `id_cat`: INT [PK]
-- `nome`: VARCHAR(50)
-- `valor_diaria`: NUMERIC(10,2)
+- O atributo composto de endereço foi achatado na tabela `CLIENTES`, com colunas separadas para rua, número, bairro, cidade, estado e CEP.
+- O atributo multivalorado de telefone foi deslocado para a tabela `TELEFONES_CLIENTE`, ligada ao cliente por chave estrangeira.
+- A especialização de funcionários foi simplificada em uma única tabela `FUNCIONARIOS`, com o atributo `cargo` para distinguir funções como atendente e gerente.
+- Alguns atributos receberam restrições adicionais de integridade, como `UNIQUE`, `CHECK` e valores do tipo `ENUM`/domínio controlado.
+- A locação passou a guardar separadamente o funcionário que registra e, quando necessário, o funcionário que autoriza.
+- O valor total da locação é tratado como informação consolidada no encerramento do processo.
 
-**VEICULO**
-- `placa`: VARCHAR(10) [PK]
-- `renavam`: VARCHAR(20)
-- `marca`: VARCHAR(50)
-- `modelo`: VARCHAR(50)
-- `cor`: VARCHAR(30)
-- `ano_fabricacao`: INT
-- `tipo_combustivel`: VARCHAR(30)
-- `km_atual`: INT
-- `nivel_combustivel`: INT
-- `status`: VARCHAR(20)
-- `id_cat`: INT [FK -> CATEGORIA(id_cat)]
+## Esquema relacional resumido
 
-**CLIENTE**
-- `cpf`: VARCHAR(14) [PK]
-- `nome`: VARCHAR(100)
-- `data_nascimento`: DATE
-- `email`: VARCHAR(100)
-- `inadimplente`: BOOLEAN
-- `cnh_numero`: VARCHAR(20)
-- `cnh_categoria`: VARCHAR(5)
-- `cnh_validade`: DATE
-- `rua`: VARCHAR(100)
-- `numero`: VARCHAR(10)
-- `bairro`: VARCHAR(50)
-- `cidade`: VARCHAR(50)
-- `estado`: VARCHAR(2)
-- `cep`: VARCHAR(10)
+**CATEGORIAS**
+- `id_cat` [PK]
+- `nome`
+- `valor_diaria`
 
-**TELEFONE_CLIENTE**
-- `cpf_cliente`: VARCHAR(14) [PK, FK -> CLIENTE(cpf)]
-- `numero`: VARCHAR(15) [PK]
-- `tipo`: VARCHAR(20)
+**VEICULOS**
+- `placa` [PK]
+- `id_cat` [FK -> CATEGORIAS(id_cat)]
+- `renavam` [UNIQUE]
+- `marca`
+- `modelo`
+- `cor`
+- `ano_fabricacao`
+- `tipo_combustivel`
+- `km_atual`
+- `nivel_combustivel`
+- `status`
 
-**FUNCIONARIO**
-- `id_func`: INT [PK]
-- `cpf`: VARCHAR(14)
-- `nome`: VARCHAR(100)
+**CLIENTES**
+- `cpf` [PK]
+- `nome`
+- `data_nascimento`
+- `email` [UNIQUE]
+- `inadimplente`
+- `cnh_numero` [UNIQUE]
+- `cnh_categoria` [CHECK]
+- `cnh_validade`
+- `endereco_rua`
+- `endereco_numero`
+- `endereco_bairro`
+- `endereco_cidade`
+- `endereco_estado`
+- `endereco_cep`
 
-**ATENDENTE**
-- `id_func`: INT [PK, FK -> FUNCIONARIO(id_func)]
+**TELEFONES_CLIENTE**
+- `cpf_cliente` [PK, FK -> CLIENTES(cpf)]
+- `numero` [PK]
+- `tipo`
 
-**GERENTE**
-- `id_func`: INT [PK, FK -> FUNCIONARIO(id_func)]
+**FUNCIONARIOS**
+- `id_func` [PK]
+- `nome`
+- `cpf` [UNIQUE]
+- `cargo`
 
-**SEGURO**
-- `id_seguro`: INT [PK]
-- `nome`: VARCHAR(50)
-- `descricao_cobertura`: TEXT
-- `valor_diario`: NUMERIC(10,2)
+**SEGUROS**
+- `id_seguro` [PK]
+- `nome`
+- `descricao_cobertura`
+- `valor_diario`
 
-**LOCACAO**
-- `id_loc`: INT [PK]
-- `status`: VARCHAR(20)
-- `data_reserva`: DATETIME
-- `data_retirada`: DATETIME
-- `data_devol_prevista`: DATETIME
-- `data_devol_real`: DATETIME
-- `valor_total`: NUMERIC(10,2)
-- `cpf_cliente`: VARCHAR(14) [FK -> CLIENTE(cpf)]
-- `placa_veiculo`: VARCHAR(10) [FK -> VEICULO(placa)]
-- `id_seguro`: INT [FK -> SEGURO(id_seguro)]
-- `id_atendente_registro`: INT [FK -> ATENDENTE(id_func)]
-- `id_gerente_autoriza`: INT [FK -> GERENTE(id_func)] -- NULLABLE (Apenas se a política exigir)
+**LOCACOES**
+- `id_loc` [PK]
+- `cpf_cliente` [FK -> CLIENTES(cpf)]
+- `placa_veiculo` [FK -> VEICULOS(placa)]
+- `id_func_registro` [FK -> FUNCIONARIOS(id_func)]
+- `id_func_autoriza` [FK -> FUNCIONARIOS(id_func), nullable]
+- `id_seguro` [FK -> SEGUROS(id_seguro)]
+- `status`
+- `data_reserva`
+- `data_retirada`
+- `data_devol_prevista`
+- `data_devol_real` [nullable]
+- `valor_total` [calculado no encerramento]
 
-**VISTORIA**
-- `id_vistoria`: INT [PK]
-- `tipo`: VARCHAR(20) -- EX: 'Retirada' ou 'Devolucao'
-- `data_hora`: DATETIME
-- `km`: INT
-- `nivel_combustivel`: INT
-- `observacoes`: TEXT
-- `id_loc`: INT [FK -> LOCACAO(id_loc)]
-- `id_func_vistoriador`: INT [FK -> FUNCIONARIO(id_func)]
+**VISTORIAS**
+- `id_vistoria` [PK]
+- `id_loc` [FK -> LOCACOES(id_loc)]
+- `id_func` [FK -> FUNCIONARIOS(id_func)]
+- `tipo`
+- `data_hora`
+- `km`
+- `nivel_combustivel`
+- `observacoes`
 
-**PAGAMENTO**
-- `id_pagamento`: INT [PK]
-- `forma_pagamento`: VARCHAR(50)
-- `valor`: NUMERIC(10,2)
-- `data_pagamento`: DATETIME
-- `id_loc`: INT [FK -> LOCACAO(id_loc)]
+**PAGAMENTOS**
+- `id_pagamento` [PK]
+- `id_loc` [FK -> LOCACOES(id_loc)]
+- `forma_pagamento`
+- `valor`
+- `data`
 
-**COBRANCA_EXTRA**
-- `id_cobranca`: INT [PK]
-- `tipo`: VARCHAR(50)
-- `descricao`: TEXT
-- `valor`: NUMERIC(10,2)
-- `id_loc`: INT [FK -> LOCACAO(id_loc)]
-- `id_vistoria_origem`: INT [FK -> VISTORIA(id_vistoria)] -- NULLABLE
+**COBRANCAS_EXTRAS**
+- `id_cobranca` [PK]
+- `id_loc` [FK -> LOCACOES(id_loc)]
+- `id_vistoria` [FK -> VISTORIAS(id_vistoria), nullable]
+- `tipo`
+- `descricao`
+- `valor`
 
-**MANUTENCAO**
-- `id_manut`: INT [PK]
-- `tipo`: VARCHAR(50)
-- `motivo`: VARCHAR(100)
-- `descricao`: TEXT
-- `data_entrada`: DATETIME
-- `previsao_saida`: DATETIME
-- `data_saida_real`: DATETIME
-- `custo`: NUMERIC(10,2)
-- `placa_veiculo`: VARCHAR(10) [FK -> VEICULO(placa)]
-- `id_func_registro`: INT [FK -> FUNCIONARIO(id_func)]
+**MANUTENCOES**
+- `id_manut` [PK]
+- `placa_veiculo` [FK -> VEICULOS(placa)]
+- `id_func` [FK -> FUNCIONARIOS(id_func)]
+- `tipo`
+- `motivo`
+- `descricao`
+- `data_entrada`
+- `previsao_saida`
+- `data_saida_real` [nullable]
+- `custo`
+
+## Relacionamentos principais
+
+- Uma categoria classifica vários veículos.
+- Um cliente pode possuir vários telefones e realizar várias locações.
+- Um veículo pode participar de várias locações e manutenções ao longo do tempo.
+- Uma locação pode gerar vistorias, pagamentos e cobranças extras.
+- Cobranças extras podem ou não estar ligadas a uma vistoria de origem.
+- Funcionários registram locações, vistorias e manutenções, e podem autorizar locações quando necessário.
+
+## Observação
+
+O conteúdo deste README acompanha a versão atual do diagrama em Mermaid e do PDF do modelo lógico. Se o diagrama mudar, este documento deve ser atualizado junto.

@@ -1,142 +1,128 @@
----
-config:
-  layout: dagre
----
 erDiagram
-	direction TB
-	CATEGORIA {
-		INT id_cat PK ""  
-		VARCHAR nome  ""  
-		NUMERIC valor_diaria  ""  
-	}
+    CATEGORIAS {
+        int id_cat PK
+        varchar nome
+        decimal valor_diaria
+    }
+    
+    VEICULOS {
+        varchar placa PK
+        int id_cat FK
+        varchar renavam "UNIQUE"
+        varchar marca
+        varchar modelo
+        varchar cor
+        int ano_fabricacao
+        varchar tipo_combustivel
+        int km_atual
+        int nivel_combustivel
+        varchar status "ENUM"
+    }
+    
+    CLIENTES {
+        varchar cpf PK
+        varchar nome
+        date data_nascimento
+        varchar email "UNIQUE"
+        boolean inadimplente
+        varchar cnh_numero "UNIQUE"
+        varchar cnh_categoria "CHECK constraint"
+        date cnh_validade
+        varchar endereco_rua
+        varchar endereco_numero
+        varchar endereco_bairro
+        varchar endereco_cidade
+        varchar endereco_estado
+        varchar endereco_cep
+    }
+    
+    TELEFONES_CLIENTE {
+        varchar cpf_cliente PK, FK
+        varchar numero PK
+        varchar tipo
+    }
+    
+    FUNCIONARIOS {
+        int id_func PK
+        varchar nome
+        varchar cpf "UNIQUE"
+        varchar cargo "Atendente/Gerente"
+    }
+    
+    SEGUROS {
+        int id_seguro PK
+        varchar nome
+        text descricao_cobertura
+        decimal valor_diario
+    }
+    
+    LOCACOES {
+        int id_loc PK
+        varchar cpf_cliente FK
+        varchar placa_veiculo FK
+        int id_func_registro FK
+        int id_func_autoriza FK "NULLABLE"
+        int id_seguro FK
+        varchar status "ENUM"
+        datetime data_reserva
+        datetime data_retirada
+        datetime data_devol_prevista
+        datetime data_devol_real "NULLABLE"
+        decimal valor_total "Calculado no encerramento"
+    }
+    
+    VISTORIAS {
+        int id_vistoria PK
+        int id_loc FK
+        int id_func FK
+        varchar tipo
+        datetime data_hora
+        int km
+        int nivel_combustivel
+        text observacoes
+    }
+    
+    PAGAMENTOS {
+        int id_pagamento PK
+        int id_loc FK
+        varchar forma_pagamento
+        decimal valor
+        datetime data
+    }
+    
+    COBRANCAS_EXTRAS {
+        int id_cobranca PK
+        int id_loc FK
+        int id_vistoria FK "NULLABLE"
+        varchar tipo
+        text descricao
+        decimal valor
+    }
+    
+    MANUTENCOES {
+        int id_manut PK
+        varchar placa_veiculo FK
+        int id_func FK
+        varchar tipo
+        varchar motivo
+        text descricao
+        date data_entrada
+        date previsao_saida
+        date data_saida_real "NULLABLE"
+        decimal custo
+    }
 
-	VEICULO {
-		VARCHAR placa PK ""  
-		VARCHAR renavam  ""  
-		VARCHAR marca  ""  
-		VARCHAR modelo  ""  
-		VARCHAR cor  ""  
-		INT ano_fabricacao  ""  
-		VARCHAR tipo_combustivel  ""  
-		INT km_atual  ""  
-		INT nivel_combustivel  ""  
-		VARCHAR status  ""  
-		INT id_cat FK ""  
-	}
-
-	CLIENTE {
-		VARCHAR cpf PK ""  
-		VARCHAR nome  ""  
-		DATE data_nascimento  ""  
-		VARCHAR email  ""  
-		BOOLEAN inadimplente  ""  
-		VARCHAR cnh_numero  ""  
-		VARCHAR cnh_categoria  ""  
-		DATE cnh_validade  ""  
-		VARCHAR rua  ""  
-		VARCHAR numero  ""  
-		VARCHAR bairro  ""  
-		VARCHAR cidade  ""  
-		VARCHAR estado  ""  
-		VARCHAR cep  ""  
-	}
-
-	TELEFONE_CLIENTE {
-		VARCHAR cpf_cliente PK,FK ""  
-		VARCHAR numero PK ""  
-		VARCHAR tipo  ""  
-	}
-
-	FUNCIONARIO {
-		INT id_func PK ""  
-		VARCHAR cpf  ""  
-		VARCHAR nome  ""  
-	}
-
-	ATENDENTE {
-		INT id_func PK,FK ""  
-	}
-
-	GERENTE {
-		INT id_func PK,FK ""  
-	}
-
-	SEGURO {
-		INT id_seguro PK ""  
-		VARCHAR nome  ""  
-		TEXT descricao_cobertura  ""  
-		NUMERIC valor_diario  ""  
-	}
-
-	LOCACAO {
-		INT id_loc PK ""  
-		VARCHAR status  ""  
-		DATETIME data_reserva  ""  
-		DATETIME data_retirada  ""  
-		DATETIME data_devol_prevista  ""  
-		DATETIME data_devol_real  ""  
-		NUMERIC valor_total  ""  
-		VARCHAR cpf_cliente FK ""  
-		VARCHAR placa_veiculo FK ""  
-		INT id_seguro FK ""  
-		INT id_atendente_registro FK ""  
-		INT id_gerente_autoriza FK ""  
-	}
-
-	VISTORIA {
-		INT id_vistoria PK ""  
-		VARCHAR tipo  ""  
-		DATETIME data_hora  ""  
-		INT km  ""  
-		INT nivel_combustivel  ""  
-		TEXT observacoes  ""  
-		INT id_loc FK ""  
-		INT id_func_vistoriador FK ""  
-	}
-
-	PAGAMENTO {
-		INT id_pagamento PK ""  
-		VARCHAR forma_pagamento  ""  
-		NUMERIC valor  ""  
-		DATETIME data_pagamento  ""  
-		INT id_loc FK ""  
-	}
-
-	COBRANCA_EXTRA {
-		INT id_cobranca PK ""  
-		VARCHAR tipo  ""  
-		TEXT descricao  ""  
-		NUMERIC valor  ""  
-		INT id_loc FK ""  
-		INT id_vistoria_origem FK ""  
-	}
-
-	MANUTENCAO {
-		INT id_manut PK ""  
-		VARCHAR tipo  ""  
-		VARCHAR motivo  ""  
-		TEXT descricao  ""  
-		DATETIME data_entrada  ""  
-		DATETIME previsao_saida  ""  
-		DATETIME data_saida_real  ""  
-		NUMERIC custo  ""  
-		VARCHAR placa_veiculo FK ""  
-		INT id_func_registro FK ""  
-	}
-
-	CATEGORIA||--|{VEICULO:"possui"
-	CLIENTE||--o{TELEFONE_CLIENTE:"tem"
-	FUNCIONARIO||--|{ATENDENTE:"é"
-	FUNCIONARIO||--|{GERENTE:"é"
-	CLIENTE||--o{LOCACAO:"realiza"
-	VEICULO||--o{LOCACAO:"vinculada"
-	SEGURO||--o{LOCACAO:"cobre"
-	ATENDENTE||--o{LOCACAO:"registra"
-	GERENTE||--o{LOCACAO:"autoriza"
-	LOCACAO||--o{VISTORIA:"gera"
-	FUNCIONARIO||--o{VISTORIA:"realiza"
-	LOCACAO||--o{PAGAMENTO:"possui"
-	LOCACAO||--o{COBRANCA_EXTRA:"possui"
-	VISTORIA||--o|COBRANCA_EXTRA:"origina"
-	VEICULO||--o{MANUTENCAO:"sofre"
-	FUNCIONARIO||--o{MANUTENCAO:"registra"
+    %% RELACIONAMENTOS
+    CATEGORIAS ||--o{ VEICULOS : "classifica"
+    CLIENTES ||--o{ TELEFONES_CLIENTE : "possui"
+    CLIENTES ||--o{ LOCACOES : "realiza"
+    VEICULOS ||--o{ LOCACOES : "vincula"
+    FUNCIONARIOS ||--o{ LOCACOES : "registra/autoriza"
+    SEGUROS ||--o{ LOCACOES : "cobre"
+    LOCACOES ||--o{ VISTORIAS : "gera"
+    LOCACOES ||--o{ PAGAMENTOS : "gera"
+    LOCACOES ||--o{ COBRANCAS_EXTRAS : "gera"
+    VISTORIAS ||--o| COBRANCAS_EXTRAS : "origina"
+    VEICULOS ||--o{ MANUTENCOES : "sofre"
+    FUNCIONARIOS ||--o{ VISTORIAS : "realiza"
+    FUNCIONARIOS ||--o{ MANUTENCOES : "registra"

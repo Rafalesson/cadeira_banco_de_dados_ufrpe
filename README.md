@@ -1,37 +1,39 @@
 # RentFlow - Sistema de Locação de Veículos
 
-Bem-vindo ao repositório do **RentFlow**, um projeto acadêmico de modelagem e desenvolvimento de banco de dados para um sistema de gestão de locação de veículos. 
+Repositório acadêmico do **RentFlow**, um projeto de modelagem de banco de dados para uma locadora de veículos. O material está organizado para mostrar a evolução do projeto a partir do levantamento de requisitos até a modelagem relacional atual.
 
-Este repositório documenta todo o ciclo de vida do desenvolvimento do banco de dados, partindo do levantamento de requisitos (Minimundo) até a implementação física.
+## Estrutura do Repositório
 
-## 🗂️ Estrutura do Repositório
+As pastas presentes no projeto representam as etapas já documentadas:
 
-A organização dos diretórios reflete as etapas clássicas de projeto de banco de dados:
+- **`RentFlow/minimundo/`**
+  Contém o documento de requisitos do sistema, com o escopo e as regras de negócio base do projeto.
 
-- 📂 **`minimundo/`**
-  Contém o documento de requisitos do sistema que descreve textualmente o escopo e as regras de negócio do RentFlow.
-  
-- 📂 **`modelo_conceitual/`**
-  Guarda o diagrama Entidade-Relacionamento (MER). Aqui as regras de negócio foram transformadas em Entidades, Atributos e Relacionamentos.
+- **`RentFlow/modelo_conceitual/`**
+  Guarda o modelo conceitual em Mermaid e em PDF. Essa versão organiza as principais entidades do domínio, como categoria, veículo, cliente, telefone, funcionário, seguro, locação, vistoria, pagamento, cobrança extra e manutenção.
 
-- 📂 **`modelo_logico/`**
-  Onde fica registrado o mapeamento do modelo conceitual para o modelo relacional (Tabelas, Tipos, Chaves Primárias e Estrangeiras).
+- **`RentFlow/modelo_logico/`**
+  Contém o modelo lógico em Mermaid, PDF e README. Nesta etapa, o modelo conceitual foi mapeado para o esquema relacional, com decisões como endereço achatado em `CLIENTES`, telefones separados em `TELEFONES_CLIENTE` e funcionários reunidos em `FUNCIONARIOS`.
 
-- 📂 **`modelo_fisico/`**
-  A etapa final. Aqui ficam os scripts DDL de criação do banco de dados (tabelas e constraints) e DML (inserts) para testes (Scripts SQL).
+## Visão do Projeto
 
-## 🎯 Sobre o Projeto
+O RentFlow modela o fluxo de uma locadora com foco em consistência e rastreabilidade dos dados. A documentação atual cobre:
 
-O **RentFlow** visa criar uma modelagem sólida que consiga gerenciar o ciclo complexo de locadora de carros, tratando aspectos cruciais como:
-- Gestão diferenciada de **Clientes** (Pessoa Física e Pessoa Jurídica) e seus **Motoristas**.
-- Especificações exclusivas para modalidades de locação (Diária, Mensal e Assinatura/Frotas).
-- Controle de ciclo de vida e estado do **Veículo** (Disponível, Locado, Manutenção, etc).
-- Precisão no registro de Ocorrências e Avarias (Multas e Danos) ocorridas durante as locações.
+- cadastro e classificação de veículos;
+- cadastro de clientes e seus telefones;
+- controle de funcionários, seguros e locações;
+- registro de vistorias, pagamentos, cobranças extras e manutenções;
+- regras de integridade e relacionamentos entre as entidades.
 
-## 📄 Documentação
+## Documentação
 
-- [📄 Minimundo do Sistema (PDF)](./RentFlow/minimundo/MINIMUNDO_%20SISTEMA%20RENTFLOW.pdf)
-- [🧩 Modelo Lógico (Texto / Mermaid)](./RentFlow/modelo_logico/)
+- [Minimundo do sistema](./RentFlow/minimundo/MINIMUNDO_%20SISTEMA%20RENTFLOW.pdf)
+- [Modelo conceitual em Mermaid](./RentFlow/modelo_conceitual/modelo_conceitual_rentflow_v2.mmd)
+- [Modelo conceitual em PDF](./RentFlow/modelo_conceitual/modelo_conceitual_rentflow_v2.pdf)
+- [Modelo lógico em Mermaid](./RentFlow/modelo_logico/modelo_logico_rentflow.mmd)
+- [Modelo lógico em PDF](./RentFlow/modelo_logico/modelo_logico_rentflow.pdf)
+- [README do modelo lógico](./RentFlow/modelo_logico/README.md)
 
 ---
-*Projeto desenvolvido como estudo prático para a disciplina de Banco de Dados da UFRPE.*
+
+Projeto desenvolvido como estudo prático para a disciplina de Banco de Dados da UFRPE.
