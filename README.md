@@ -28,6 +28,7 @@ O RentFlow modela o fluxo de uma locadora com foco em consistência e rastreabil
 ## Documentação
 
 - [Minimundo do sistema](./RentFlow/minimundo/MINIMUNDO_%20SISTEMA%20RENTFLOW.pdf)
+- [README do minimundo](./RentFlow/minimundo/README.md)
 - [Modelo conceitual em README](./RentFlow/modelo_conceitual/README.md)
 - [Modelo conceitual em Mermaid](./RentFlow/modelo_conceitual/modelo_conceitual_rentflow_v2.mmd)
 - [Modelo conceitual em PDF](./RentFlow/modelo_conceitual/modelo_conceitual_rentflow_v2.pdf)
